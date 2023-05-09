@@ -8,6 +8,15 @@
           "value": "gzip"
         }
       ]
+    },
+    {
+      "source": "/tiles/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=120, immutable"
+        }
+      ]
     }
   ]
 }

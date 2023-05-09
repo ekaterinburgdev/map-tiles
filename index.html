@@ -14,13 +14,11 @@
   <head>
     <script src="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
     <script src="/maplibre-gl-inspect.js"></script>
-    <script src="/maplibre-gl-tile-boundaries.js"></script>
     <link
       href="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css"
       rel="stylesheet"
     />
     <link href="/maplibre-gl-inspect.css" rel="stylesheet" />
-    <link href="/maplibre-gl-tile-boundaries.css" rel="stylesheet" />
     <style>
       body {
         margin: 0;
@@ -41,7 +39,7 @@
       let map = new maplibregl.Map({
         container: "map",
         style: "/style.json",
-        minZoom: 10,
+        minZoom: 11,
         maxZoom: 16,
         hash: true,
       });
@@ -59,13 +57,6 @@
             closeButton: true,
             closeOnClick: true,
           }),
-        })
-      );
-
-      // Add the tile boundaries control to the map
-      map.addControl(
-        new MaplibreTileBoundaries({
-          showBoundaries: false,
         })
       );
     </script>
