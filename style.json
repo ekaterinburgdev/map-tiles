@@ -8,7 +8,7 @@
     }
   },
   "sprite": "https://tiles.baremaps.com/sprites/osm/sprite",
-  "glyphs": "https://tiles.baremaps.com/fonts/{fontstack}/{range}.pbf",
+  "glyphs": "/fonts/{fontstack}/{range}.pbf",
   "layers": [
     {
       "id": "background",
@@ -258,7 +258,7 @@
         "text-allow-overlap": false,
         "text-anchor": "center",
         "text-field": "{addr:housenumber}",
-        "text-font": ["Noto Sans Regular"],
+        "text-font": ["Iset Sans Regular"],
         "text-offset": [0, 0],
         "text-size": [
           "interpolate",
@@ -1076,7 +1076,7 @@
         "symbol-placement": "line",
         "text-anchor": "center",
         "text-field": ["get", "name"],
-        "text-font": ["Noto Sans Regular"],
+        "text-font": ["Iset Sans Regular"],
         "text-size": [
           "interpolate",
           ["exponential", 1],
@@ -1102,7 +1102,7 @@
       "source-layer": "waterway",
       "layout": {
         "visibility": "visible",
-        "text-font": ["Noto Sans Italic"],
+        "text-font": ["Iset Sans Italic"],
         "text-field": ["get", "name"],
         "text-size": [
           "interpolate",
@@ -1140,7 +1140,7 @@
         "visibility": "visible",
         "icon-size": 1,
         "icon-anchor": "bottom",
-        "text-font": ["Noto Sans Regular"],
+        "text-font": ["Iset Sans Regular"],
         "text-size": 11,
         "text-field": ["get", "name"],
         "text-anchor": "top",
@@ -1222,7 +1222,7 @@
           0
         ],
         "visibility": "visible",
-        "text-font": ["Noto Sans Regular"],
+        "text-font": ["Iset Sans Regular"],
         "text-field": ["get", "name"]
       },
       "paint": {
