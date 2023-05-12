@@ -1,14 +1,14 @@
 {
   "version": 8,
-  "name": "OpenStreetMapVecto",
+  "name": "ekaterinburg.city",
   "sources": {
     "baremaps": {
       "type": "vector",
-      "url": "https://cartography-zeta.vercel.app/tiles.json"
+      "url": "/tiles.json"
     }
   },
   "sprite": "https://tiles.baremaps.com/sprites/osm/sprite",
-  "glyphs": "https://cartography-zeta.vercel.app/fonts/{fontstack}/{range}.pbf",
+  "glyphs": "/fonts/{fontstack}/{range}.pbf",
   "layers": [
     {
       "id": "background",
@@ -237,16 +237,36 @@
       }
     },
     {
-      "id": "building",
+      "id": "amenity_fill_2",
       "type": "fill",
+      "filter": ["any", ["==", ["get", "amenity"], "fountain"]],
+      "source": "baremaps",
+      "source-layer": "amenity",
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "fill-color": "#083245"
+      }
+    },
+    {
+      "id": "building",
+      "type": "fill-extrusion",
       "source": "baremaps",
       "source-layer": "building",
       "layout": {
         "visibility": "visible"
       },
       "paint": {
-        "fill-color": "#0c1021",
-        "fill-antialias": true
+        "fill-extrusion-color": "#0c1021",
+        "fill-extrusion-height": ["get", "building:height"],
+        "fill-extrusion-base": 0,
+        "fill-extrusion-opacity": {
+          "stops": [
+            [10, 0],
+            [15, 1]
+          ]
+        }
       }
     },
     {
@@ -274,193 +294,15 @@
         "visibility": "visible"
       },
       "paint": {
-        "text-color": "rgb(77,77,77)",
+        "text-color": "rgba(255, 255, 255, 0.1)",
         "text-halo-color": "rgba(0,0,0,0.8)",
-        "text-halo-width": 0
-      }
-    },
-    {
-      "id": "highway_outline",
-      "type": "line",
-      "filter": [
-        "all",
-        [
-          "all",
-          ["!=", ["get", "bridge"], "yes"],
-          ["!=", ["get", "tunnel"], "yes"],
-          ["!=", ["get", "layer"], "-1"],
-          ["!=", ["get", "covered"], "yes"]
-        ],
-        [
-          "any",
-          [
-            "any",
-            ["==", ["get", "highway"], "motorway"],
-            ["==", ["get", "highway"], "motorway_link"]
-          ],
-          [
-            "any",
-            ["==", ["get", "highway"], "trunk"],
-            ["==", ["get", "highway"], "trunk_link"]
-          ],
-          [
-            "any",
-            ["==", ["get", "highway"], "primary"],
-            ["==", ["get", "highway"], "primary_link"]
-          ],
-          [
-            "any",
-            ["==", ["get", "highway"], "secondary"],
-            ["==", ["get", "highway"], "secondary_link"]
-          ],
-          [
-            "any",
-            ["==", ["get", "highway"], "tertiary"],
-            ["==", ["get", "highway"], "tertiary_link"]
-          ],
-          ["==", ["get", "highway"], "unclassified"],
-          ["==", ["get", "highway"], "residential"],
-          ["==", ["get", "highway"], "living_street"],
-          ["==", ["get", "highway"], "service"],
-          [
-            "all",
-            ["==", ["get", "highway"], "pedestrian"],
-            ["!=", ["get", "area"], "yes"]
-          ],
-          [
-            "all",
-            ["==", ["get", "highway"], "pedestrian"],
-            ["==", ["get", "area"], "yes"]
+        "text-halo-width": 0,
+        "text-opacity": {
+          "stops": [
+            [10, 0],
+            [15, 1]
           ]
-        ]
-      ],
-      "source": "baremaps",
-      "source-layer": "highway",
-      "layout": {
-        "visibility": "visible",
-        "line-cap": "round",
-        "line-join": "round"
-      },
-      "paint": {
-        "line-color": "#171930",
-        "line-width": [
-          "interpolate",
-          ["exponential", 1.2],
-          ["zoom"],
-          5,
-          0.2,
-          20,
-          [
-            "case",
-            [
-              "any",
-              ["==", ["get", "highway"], "motorway"],
-              ["==", ["get", "highway"], "motorway_link"]
-            ],
-            2,
-            [
-              "any",
-              ["==", ["get", "highway"], "trunk"],
-              ["==", ["get", "highway"], "trunk_link"]
-            ],
-            2,
-            [
-              "any",
-              ["==", ["get", "highway"], "primary"],
-              ["==", ["get", "highway"], "primary_link"]
-            ],
-            2,
-            [
-              "any",
-              ["==", ["get", "highway"], "secondary"],
-              ["==", ["get", "highway"], "secondary_link"]
-            ],
-            2,
-            [
-              "any",
-              ["==", ["get", "highway"], "tertiary"],
-              ["==", ["get", "highway"], "tertiary_link"]
-            ],
-            2,
-            ["==", ["get", "highway"], "unclassified"],
-            2,
-            ["==", ["get", "highway"], "residential"],
-            2,
-            ["==", ["get", "highway"], "living_street"],
-            2,
-            ["==", ["get", "highway"], "service"],
-            2,
-            [
-              "all",
-              ["==", ["get", "highway"], "pedestrian"],
-              ["!=", ["get", "area"], "yes"]
-            ],
-            2,
-            [
-              "all",
-              ["==", ["get", "highway"], "pedestrian"],
-              ["==", ["get", "area"], "yes"]
-            ],
-            2,
-            1
-          ]
-        ],
-        "line-gap-width": [
-          "interpolate",
-          ["exponential", 1.2],
-          ["zoom"],
-          5,
-          0.2,
-          20,
-          [
-            "case",
-            [
-              "any",
-              ["==", ["get", "highway"], "motorway"],
-              ["==", ["get", "highway"], "motorway_link"]
-            ],
-            12,
-            [
-              "any",
-              ["==", ["get", "highway"], "trunk"],
-              ["==", ["get", "highway"], "trunk_link"]
-            ],
-            8,
-            [
-              "any",
-              ["==", ["get", "highway"], "primary"],
-              ["==", ["get", "highway"], "primary_link"]
-            ],
-            10,
-            [
-              "any",
-              ["==", ["get", "highway"], "secondary"],
-              ["==", ["get", "highway"], "secondary_link"]
-            ],
-            8,
-            [
-              "any",
-              ["==", ["get", "highway"], "tertiary"],
-              ["==", ["get", "highway"], "tertiary_link"]
-            ],
-            8,
-            ["==", ["get", "highway"], "unclassified"],
-            4,
-            ["==", ["get", "highway"], "residential"],
-            4,
-            ["==", ["get", "highway"], "living_street"],
-            4,
-            ["==", ["get", "highway"], "service"],
-            4,
-            [
-              "all",
-              ["==", ["get", "highway"], "pedestrian"],
-              ["!=", ["get", "area"], "yes"]
-            ],
-            2,
-            1
-          ]
-        ]
+        }
       }
     },
     {
@@ -549,13 +391,13 @@
               ["==", ["get", "highway"], "primary"],
               ["==", ["get", "highway"], "primary_link"]
             ],
-            10,
+            20,
             [
               "any",
               ["==", ["get", "highway"], "secondary"],
               ["==", ["get", "highway"], "secondary_link"]
             ],
-            8,
+            12,
             [
               "any",
               ["==", ["get", "highway"], "tertiary"],
@@ -565,13 +407,13 @@
             ["==", ["get", "highway"], "unclassified"],
             4,
             ["==", ["get", "highway"], "residential"],
-            4,
+            2,
             ["==", ["get", "highway"], "living_street"],
-            4,
+            2,
             ["==", ["get", "highway"], "service"],
-            4,
+            2,
             ["==", ["get", "highway"], "raceway"],
-            4,
+            2,
             [
               "all",
               ["==", ["get", "highway"], "pedestrian"],
@@ -580,7 +422,9 @@
             2,
             1
           ]
-        ]
+        ],
+        "line-offset": 0,
+        "line-blur": 0
       }
     },
     {
@@ -699,7 +543,8 @@
             1
           ]
         ],
-        "line-dasharray": [2, 2]
+        "line-dasharray": [2, 2],
+        "line-opacity": 0.5
       }
     },
     {
@@ -1003,6 +848,7 @@
         "line-cap": "butt",
         "line-join": "miter"
       },
+      "minzoom": 0,
       "paint": {
         "line-color": "#171930",
         "line-width": [
@@ -1086,12 +932,16 @@
           14,
           12
         ],
-        "visibility": "visible"
+        "visibility": "visible",
+        "text-transform": "uppercase",
+        "text-letter-spacing": 0.1,
+        "icon-size": 1
       },
       "paint": {
-        "text-color": "rgb(96, 96, 96)",
+        "text-color": "rgba(255, 255, 255, .3)",
         "text-halo-color": "rgba(0, 0, 0, 0.8)",
-        "text-halo-width": 1
+        "text-halo-width": 1,
+        "text-opacity": 1
       }
     },
     {
@@ -1102,7 +952,7 @@
       "source-layer": "waterway",
       "layout": {
         "visibility": "visible",
-        "text-font": ["Iset Sans Italic"],
+        "text-font": ["Iset Sans Regular"],
         "text-field": ["get", "name"],
         "text-size": [
           "interpolate",
@@ -1115,119 +965,14 @@
           18,
           11
         ],
-        "symbol-placement": "line"
+        "symbol-placement": "line",
+        "text-letter-spacing": 0.2,
+        "text-transform": "uppercase"
       },
       "minzoom": 12,
       "paint": {
-        "text-color": "rgba(96, 96, 96, 0.8)",
+        "text-color": "rgba(10, 120, 160, 1)",
         "text-halo-color": "rgba(0, 0, 0, 0)",
-        "text-halo-width": 1
-      }
-    },
-    {
-      "id": "icon",
-      "type": "symbol",
-      "filter": ["any", ["==", ["get", "highway"], "bus_stop"]],
-      "source": "baremaps",
-      "source-layer": "point",
-      "layout": {
-        "icon-image": [
-          "case",
-          ["==", ["get", "highway"], "bus_stop"],
-          "bus_station",
-          "none"
-        ],
-        "visibility": "visible",
-        "icon-size": 1,
-        "icon-anchor": "bottom",
-        "text-font": ["Iset Sans Regular"],
-        "text-size": 11,
-        "text-field": ["get", "name"],
-        "text-anchor": "top",
-        "text-optional": true,
-        "text-max-width": 5
-      },
-      "minzoom": 14,
-      "paint": {
-        "icon-translate-anchor": "map",
-        "icon-halo-color": "rgba(255, 255, 255, 0.8)",
-        "icon-color": "rgb(0, 146, 219)",
-        "text-color": "rgb(0, 146, 219)"
-      }
-    },
-    {
-      "id": "label",
-      "type": "symbol",
-      "filter": [
-        "any",
-        [
-          "all",
-          ["==", ["get", "capital"], "yes"],
-          ["==", ["get", "place"], "city"]
-        ],
-        [
-          "all",
-          ["!=", ["get", "capital"], "yes"],
-          ["==", ["get", "place"], "city"]
-        ],
-        ["==", ["get", "place"], "town"],
-        ["==", ["get", "place"], "village"],
-        ["==", ["get", "place"], "locality"]
-      ],
-      "source": "baremaps",
-      "source-layer": "point",
-      "layout": {
-        "text-size": [
-          "case",
-          [
-            "all",
-            ["==", ["get", "capital"], "yes"],
-            ["==", ["get", "place"], "city"]
-          ],
-          16,
-          [
-            "all",
-            ["!=", ["get", "capital"], "yes"],
-            ["==", ["get", "place"], "city"]
-          ],
-          16,
-          ["==", ["get", "place"], "town"],
-          14,
-          ["==", ["get", "place"], "village"],
-          12,
-          ["==", ["get", "place"], "locality"],
-          12,
-          12
-        ],
-        "symbol-sort-key": [
-          "case",
-          [
-            "all",
-            ["==", ["get", "capital"], "yes"],
-            ["==", ["get", "place"], "city"]
-          ],
-          ["-", ["to-number", ["get", "population"], 0]],
-          [
-            "all",
-            ["!=", ["get", "capital"], "yes"],
-            ["==", ["get", "place"], "city"]
-          ],
-          ["-", ["to-number", ["get", "population"], 0]],
-          ["==", ["get", "place"], "town"],
-          2,
-          ["==", ["get", "place"], "village"],
-          3,
-          ["==", ["get", "place"], "locality"],
-          4,
-          0
-        ],
-        "visibility": "visible",
-        "text-font": ["Iset Sans Regular"],
-        "text-field": ["get", "name"]
-      },
-      "paint": {
-        "text-color": "rgba(255, 255, 255, 0.8)",
-        "text-halo-color": "rgba(0, 0, 0, 0.8)",
         "text-halo-width": 1
       }
     }

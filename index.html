@@ -40,9 +40,12 @@
       let map = new maplibregl.Map({
         container: "map",
         style: "/style.json",
-        minZoom: 13,
+        minZoom: 11,
         maxZoom: 16,
         hash: true,
+        pitch: 60,
+        center: [60.6099, 56.83898],
+        zoom: 14,
       });
 
       // Add the navigation control to the map
@@ -65,13 +68,15 @@
         document
           .querySelector('[type="color"]')
           .addEventListener("input", (e) => {
-            map.setPaintProperty("building", "fill-color", [
+            map.setPaintProperty("building", "fill-extrusion-color", [
               "interpolate",
               ["linear"],
-              ["to-number", ["get", "building:levels"]],
-              0,
+              ["to-number", ["get", "building:year"]],
+              1850,
               "#0c1021",
-              30,
+              1970,
+              "red",
+              2020,
               e.target.value,
             ]);
           });

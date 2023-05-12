@@ -1,6 +1,6 @@
 {
   "tilejson": "2.2.0",
-  "tiles": ["https://cartography-zeta.vercel.app/tiles/{z}/{x}/{y}.mvt?v=1000"],
+  "tiles": ["https://cartography-zeta.vercel.app/tiles/{z}/{x}/{y}.mvt?v=1"],
   "minzoom": 10,
   "maxzoom": 16,
   "bounds": [60.2768, 56.6769, 60.8812, 56.9579],
