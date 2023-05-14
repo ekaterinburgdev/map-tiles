@@ -80,6 +80,84 @@
               e.target.value,
             ]);
           });
+
+        map.addSource("points", {
+          type: "geojson",
+          data: "./dtp.geojson", // замените на путь к вашему GeoJSON файлу
+        });
+
+        // Добавляем слой, который будет использовать эти данные
+        map.addLayer({
+          id: "circles",
+          type: "circle", // тип слоя
+          source: "points", // id источника данных, который мы только что добавили
+          paint: {
+            "circle-radius": 2,
+            // "circle-color": "#007cbf",
+            "circle-color": [
+              "case",
+              ["==", ["get", "severity"], "Легкий"],
+              "#36ccaa",
+              ["==", ["get", "severity"], "Тяжёлый"],
+              "#fdcf4e",
+              ["==", ["get", "severity"], "С погибшими"],
+              "#ff0000",
+              "#007cbf",
+            ],
+          },
+        });
+
+        // map.addSource("my-data", {
+        //   type: "vector",
+        //   tiles: ["https://cartography-zeta.vercel.app/dtp/{z}/{x}/{y}.pbf"],
+        // });
+
+        // map.addLayer({
+        //   id: "dtp",
+        //   type: "heatmap",
+        //   // type: "circle",
+        //   source: "my-data",
+        //   "source-layer": "dtp",
+        //   layout: {},
+        //   paint: {
+        //     // "circle-color": "blue",
+        //     "heatmap-radius": [
+        //       "interpolate",
+        //       ["linear"],
+        //       ["zoom"],
+        //       0,
+        //       2,
+        //       4,
+        //       10,
+        //     ],
+        //     "heatmap-intensity": [
+        //       "interpolate",
+        //       ["linear"],
+        //       ["zoom"],
+        //       0,
+        //       1,
+        //       9,
+        //       3,
+        //     ],
+        //     "heatmap-color": [
+        //       "interpolate",
+        //       ["linear"],
+        //       ["heatmap-density"],
+        //       0,
+        //       "rgba(33,102,172,0)",
+        //       0.2,
+        //       "rgb(103,169,207)",
+        //       0.4,
+        //       "rgb(209,229,240)",
+        //       0.6,
+        //       "rgb(253,219,199)",
+        //       0.8,
+        //       "rgb(239,138,98)",
+        //       1,
+        //       "rgb(178,24,43)",
+        //     ],
+        //   },
+        // });
       });
     </script>
   </body>
