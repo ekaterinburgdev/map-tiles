@@ -30,6 +30,19 @@
           "value": "public, max-age=120, immutable"
         }
       ]
+    },
+    {
+      "source": "/dtp.geojson",
+      "headers": [
+        {
+          "key": "Content-Encoding",
+          "value": "gzip"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=120, immutable"
+        }
+      ]
     }
   ]
 }
