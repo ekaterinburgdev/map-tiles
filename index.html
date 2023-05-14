@@ -81,31 +81,31 @@
             ]);
           });
 
-        map.addSource("points", {
-          type: "geojson",
-          data: "./dtp.geojson", // замените на путь к вашему GeoJSON файлу
-        });
+        // map.addSource("points", {
+        //   type: "geojson",
+        //   data: "./dtp.geojson", // замените на путь к вашему GeoJSON файлу
+        // });
 
-        // Добавляем слой, который будет использовать эти данные
-        map.addLayer({
-          id: "circles",
-          type: "circle", // тип слоя
-          source: "points", // id источника данных, который мы только что добавили
-          paint: {
-            "circle-radius": 2,
-            // "circle-color": "#007cbf",
-            "circle-color": [
-              "case",
-              ["==", ["get", "severity"], "Легкий"],
-              "#36ccaa",
-              ["==", ["get", "severity"], "Тяжёлый"],
-              "#fdcf4e",
-              ["==", ["get", "severity"], "С погибшими"],
-              "#ff0000",
-              "#007cbf",
-            ],
-          },
-        });
+        // // Добавляем слой, который будет использовать эти данные
+        // map.addLayer({
+        //   id: "circles",
+        //   type: "circle", // тип слоя
+        //   source: "points", // id источника данных, который мы только что добавили
+        //   paint: {
+        //     "circle-radius": 2,
+        //     // "circle-color": "#007cbf",
+        //     "circle-color": [
+        //       "case",
+        //       ["==", ["get", "severity"], "Легкий"],
+        //       "#36ccaa",
+        //       ["==", ["get", "severity"], "Тяжёлый"],
+        //       "#fdcf4e",
+        //       ["==", ["get", "severity"], "С погибшими"],
+        //       "#ff0000",
+        //       "#007cbf",
+        //     ],
+        //   },
+        // });
 
         // map.addSource("my-data", {
         //   type: "vector",
