@@ -12,9 +12,17 @@
       rel="stylesheet"
     />
 
+    <script src="https://unpkg.com/@maplibre/maplibre-gl-geocoder@1.2.0/dist/maplibre-gl-geocoder.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@maplibre/maplibre-gl-geocoder@1.2.0/dist/maplibre-gl-geocoder.css"
+      type="text/css"
+    />
+
     <link href="/maplibre-gl-inspect.css" rel="stylesheet" />
     <style>
       body {
+        font-family: sans-serif;
         margin: 0;
       }
 
@@ -30,12 +38,27 @@
         right: 8px;
         width: 80px;
       }
+
+      .download-selected {
+        position: fixed;
+        bottom: 8px;
+        left: 8px;
+        color: white;
+        background-color: darkslategray;
+        -webkit-appearance: none;
+        appearance: none;
+        padding: 4px 8px;
+        border-radius: 2px;
+        font-size: 12px;
+        cursor: pointer;
+      }
     </style>
     <title>Карта Екатеринбурга</title>
   </head>
   <body>
     <div id="map"></div>
     <input type="color" value="#ffff00" />
+    <butotn class="download-selected">download selected</butotn>
     <script>
       // Initialize the map
       let map = new maplibregl.Map({
@@ -49,13 +72,96 @@
         zoom: 14,
       });
 
+      const selected = {};
+
+      document
+        .querySelector(".download-selected")
+        .addEventListener("click", () => {
+          const filename = "my_feature_collection.geojson";
+          downloadFeatureCollection(Object.values(selected), filename);
+        });
+
+      map.on("click", "building", function (e) {
+        // Получаем информацию о выбранном доме
+        const selectedBuilding = e?.features?.[0];
+        if (selected[selectedBuilding.id]) {
+          delete selected[selectedBuilding.id];
+        } else {
+          selected[selectedBuilding.id] = selectedBuilding.toJSON();
+        }
+
+        const cases = ["case"];
+        for (let id in selected) {
+          console.log(id, selected);
+          cases.push(["==", ["id"], +id], "rgb(255, 0, 0)");
+        }
+
+        if (cases.length > 1) {
+          cases.push("#0c1021");
+          map.setPaintProperty("building", "fill-extrusion-color", cases);
+        } else {
+          map.setPaintProperty("building", "fill-extrusion-color", "#0c1021");
+        }
+      });
+
+      const viewbox = "60.2768,56.6769,60.8812,56.9579"; // Координаты границ квадрата (западная, северная, восточная, южная точки)
+
+      var geocoder_api = {
+        forwardGeocode: async (config) => {
+          const features = [];
+          try {
+            let request =
+              "https://nominatim.openstreetmap.org/search?q=" +
+              config.query +
+              "&format=geojson&polygon_geojson=1&addressdetails=1" +
+              `&viewbox=${encodeURIComponent(viewbox)}&bounded=1`;
+            const response = await fetch(request);
+            const geojson = await response.json();
+            for (let feature of geojson.features) {
+              if (feature.properties?.category !== "building") {
+                continue;
+              }
+
+              let center = [
+                feature.bbox[0] + (feature.bbox[2] - feature.bbox[0]) / 2,
+                feature.bbox[1] + (feature.bbox[3] - feature.bbox[1]) / 2,
+              ];
+              let point = {
+                type: "Feature",
+                geometry: {
+                  type: "Point",
+                  coordinates: center,
+                },
+                place_name: feature.properties.display_name,
+                properties: feature.properties,
+                text: feature.properties.display_name,
+                place_type: ["place"],
+                center: center,
+              };
+              features.push(point);
+            }
+          } catch (e) {
+            console.error(`Failed to forwardGeocode with error: ${e}`);
+          }
+
+          return {
+            features: features,
+          };
+        },
+      };
+      map.addControl(
+        new MaplibreGeocoder(geocoder_api, {
+          maplibregl: maplibregl,
+        })
+      );
+
       // Add the navigation control to the map
       map.addControl(new maplibregl.NavigationControl());
 
       // Add the inspect control to the map
       map.addControl(
         new MaplibreInspect({
-          showMapPopup: true,
+          // showMapPopup: true,
           showMapPopupOnHover: false,
           showInspectMapPopupOnHover: false,
           popup: new maplibregl.Popup({
@@ -82,87 +188,29 @@
             ]);
             changeModelColor(e.target.value);
           });
-
-        // map.setFilter("building", ["!=", "name", "Ельцин-центр"]);
-
-        // map.addSource("points", {
-        //   type: "geojson",
-        //   data: "https://cartography-zeta.vercel.app/dtp.geojson", // замените на путь к вашему GeoJSON файлу
-        // });
-
-        // Добавляем слой, который будет использовать эти данные
-        // map.addLayer({
-        //   id: "circles",
-        //   type: "circle",
-        //   source: "points",
-        //   paint: {
-        //     "circle-radius": 2,
-        //     // "circle-color": "#007cbf",
-        //     "circle-color": [
-        //       "case",
-        //       ["==", ["get", "severity"], "Легкий"],
-        //       "#36ccaa",
-        //       ["==", ["get", "severity"], "Тяжёлый"],
-        //       "#fdcf4e",
-        //       ["==", ["get", "severity"], "С погибшими"],
-        //       "#ff0000",
-        //       "#007cbf",
-        //     ],
-        //   },
-        // });
-
-        // map.addSource("my-data", {
-        //   type: "vector",
-        //   tiles: ["https://cartography-zeta.vercel.app/dtp/{z}/{x}/{y}.pbf"],
-        // });
-
-        // map.addLayer({
-        //   id: "dtp",
-        //   type: "heatmap",
-        //   // type: "circle",
-        //   source: "my-data",
-        //   "source-layer": "dtp",
-        //   layout: {},
-        //   paint: {
-        //     // "circle-color": "blue",
-        //     "heatmap-radius": [
-        //       "interpolate",
-        //       ["linear"],
-        //       ["zoom"],
-        //       0,
-        //       2,
-        //       4,
-        //       10,
-        //     ],
-        //     "heatmap-intensity": [
-        //       "interpolate",
-        //       ["linear"],
-        //       ["zoom"],
-        //       0,
-        //       1,
-        //       9,
-        //       3,
-        //     ],
-        //     "heatmap-color": [
-        //       "interpolate",
-        //       ["linear"],
-        //       ["heatmap-density"],
-        //       0,
-        //       "rgba(33,102,172,0)",
-        //       0.2,
-        //       "rgb(103,169,207)",
-        //       0.4,
-        //       "rgb(209,229,240)",
-        //       0.6,
-        //       "rgb(253,219,199)",
-        //       0.8,
-        //       "rgb(239,138,98)",
-        //       1,
-        //       "rgb(178,24,43)",
-        //     ],
-        //   },
-        // });
       });
+
+      function downloadFeatureCollection(features, filename) {
+        const featureCollection = {
+          type: "FeatureCollection",
+          features: features,
+        };
+
+        const geojsonString = JSON.stringify(featureCollection);
+
+        const blob = new Blob([geojsonString], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = filename;
+
+        document.body.appendChild(link);
+        link.click();
+
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      }
     </script>
   </body>
 </html>
