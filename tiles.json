@@ -1,7 +1,7 @@
 {
   "tilejson": "2.2.0",
   "tiles": [
-    "https://cartography-git-v2-gcor.vercel.app/tiles/{z}/{x}/{y}.mvt?v=1"
+    "https://cartography-git-v2-anton-team.vercel.app/tiles/{z}/{x}/{y}.mvt?v=1"
   ],
   "minzoom": 10,
   "maxzoom": 16,

@@ -4,11 +4,11 @@
   "sources": {
     "baremaps": {
       "type": "vector",
-      "url": "https://cartography-git-v2-gcor.vercel.app/tiles.json"
+      "url": "https://cartography-git-v2-anton-team.vercel.app/tiles.json"
     }
   },
   "sprite": "https://tiles.baremaps.com/sprites/osm/sprite",
-  "glyphs": "https://cartography-git-v2-gcor.vercel.app/fonts/{fontstack}/{range}.pbf",
+  "glyphs": "https://cartography-git-v2-anton-team.vercel.app/fonts/{fontstack}/{range}.pbf",
   "layers": [
     {
       "id": "background",
