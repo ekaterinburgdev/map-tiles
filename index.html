@@ -57,8 +57,7 @@
   </head>
   <body>
     <div id="map"></div>
-    <input type="color" value="#ffff00" />
-    <butotn class="download-selected">download selected</butotn>
+    <button class="download-selected">download selected</button>
     <script>
       // Initialize the map
       let map = new maplibregl.Map({
@@ -81,28 +80,27 @@
           downloadFeatureCollection(Object.values(selected), filename);
         });
 
-      map.on("click", "building", function (e) {
-        // Получаем информацию о выбранном доме
-        const selectedBuilding = e?.features?.[0];
-        if (selected[selectedBuilding.id]) {
-          delete selected[selectedBuilding.id];
-        } else {
-          selected[selectedBuilding.id] = selectedBuilding.toJSON();
-        }
-
-        const cases = ["case"];
-        for (let id in selected) {
-          console.log(id, selected);
-          cases.push(["==", ["id"], +id], "rgb(255, 0, 0)");
-        }
-
-        if (cases.length > 1) {
-          cases.push("#0c1021");
-          map.setPaintProperty("building", "fill-extrusion-color", cases);
-        } else {
-          map.setPaintProperty("building", "fill-extrusion-color", "#0c1021");
-        }
-      });
+      // map.on("click", "building", function (e) {
+      //   // Получаем информацию о выбранном доме
+      //   const selectedBuilding = e?.features?.[0];
+      //   console.log(selectedBuilding);
+      //   if (selected[selectedBuilding.id]) {
+      //     delete selected[selectedBuilding.id];
+      //   } else {
+      //     selected[selectedBuilding.id] = selectedBuilding.toJSON();
+      //   }
+      //   const cases = ["case"];
+      //   for (let id in selected) {
+      //     console.log(id, selected);
+      //     cases.push(["==", ["id"], +id], "rgb(255, 0, 0)");
+      //   }
+      //   if (cases.length > 1) {
+      //     cases.push("#0c1021");
+      //     map.setPaintProperty("building", "fill-extrusion-color", cases);
+      //   } else {
+      //     map.setPaintProperty("building", "fill-extrusion-color", "#0c1021");
+      //   }
+      // });
 
       const viewbox = "60.2768,56.6769,60.8812,56.9579"; // Координаты границ квадрата (западная, северная, восточная, южная точки)
 
@@ -161,7 +159,7 @@
       // Add the inspect control to the map
       map.addControl(
         new MaplibreInspect({
-          // showMapPopup: true,
+          showMapPopup: true,
           showMapPopupOnHover: false,
           showInspectMapPopupOnHover: false,
           popup: new maplibregl.Popup({
@@ -170,25 +168,6 @@
           }),
         })
       );
-
-      map.on("style.load", function () {
-        document
-          .querySelector('[type="color"]')
-          .addEventListener("input", (e) => {
-            map.setPaintProperty("building", "fill-extrusion-color", [
-              "interpolate",
-              ["linear"],
-              ["to-number", ["get", "building:year"]],
-              1850,
-              "#0c1021",
-              1970,
-              "red",
-              2020,
-              e.target.value,
-            ]);
-            changeModelColor(e.target.value);
-          });
-      });
 
       function downloadFeatureCollection(features, filename) {
         const featureCollection = {
