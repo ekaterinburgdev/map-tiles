@@ -4,7 +4,7 @@
   "sources": {
     "baremaps": {
       "type": "vector",
-      "url": "/tiles.json"
+      "url": "https://cartography-zeta.vercel.app/tiles.json"
     }
   },
   "sprite": "https://tiles.baremaps.com/sprites/osm/sprite",
